@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ProgressTracer">
+        <attr name="text" format="string"/>
+        <attr name="radius" format="integer"/>
+        <attr name="progress" format="float"/>
+        <attr name="arc_thickness" format="float"/>
+        <attr name="start_deg" format="float"/>
+        <attr name="arc_len" format="float"/>
+    </declare-styleable>
+</resources>
