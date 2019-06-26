@@ -7,5 +7,7 @@
         <attr name="arc_thickness" format="float"/>
         <attr name="start_deg" format="float"/>
         <attr name="arc_len" format="float"/>
+        <attr name="remaining_color" format="color"/>
+        <attr name="completed_color" format="color"/>
     </declare-styleable>
 </resources>

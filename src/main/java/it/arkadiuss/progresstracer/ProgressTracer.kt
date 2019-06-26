@@ -29,6 +29,8 @@ class ProgressTracer(context: Context, attr: AttributeSet) : View(context,attr){
     private var startPoint = 110f
     private var degLen = 320f
     private var radius = 500
+    private var remainingColor = ContextCompat.getColor(context, android.R.color.black)
+    private var completedColor = ContextCompat.getColor(context, android.R.color.black)
 
     private lateinit var oval: RectF
     private lateinit var smallOval: RectF
@@ -47,6 +49,8 @@ class ProgressTracer(context: Context, attr: AttributeSet) : View(context,attr){
                 radius = getInt(R.styleable.ProgressTracer_radius, 500)
                 startPoint = getFloat(R.styleable.ProgressTracer_start_deg, 110f)
                 degLen = getFloat(R.styleable.ProgressTracer_arc_len, 320f)
+                completedColor = getColor(R.styleable.ProgressTracer_completed_color, completedColor)
+                remainingColor = getColor(R.styleable.ProgressTracer_remaining_color, remainingColor)
             }finally {
                 recycle()
             }
@@ -54,11 +58,11 @@ class ProgressTracer(context: Context, attr: AttributeSet) : View(context,attr){
     }
 
     private val completedPartPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = ContextCompat.getColor(context, android.R.color.black)
+        color = completedColor
     }
 
     private val remainingPartPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = ContextCompat.getColor(context, android.R.color.holo_green_dark)
+        color = remainingColor
     }
 
     private val textPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
