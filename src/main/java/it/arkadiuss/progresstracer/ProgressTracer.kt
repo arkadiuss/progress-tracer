@@ -31,6 +31,7 @@ class ProgressTracer(context: Context, attr: AttributeSet) : View(context,attr){
     private var radius = 500
     private var remainingColor = ContextCompat.getColor(context, android.R.color.black)
     private var completedColor = ContextCompat.getColor(context, android.R.color.black)
+    private var roundedEndings = true
 
     private lateinit var oval: RectF
     private lateinit var smallOval: RectF
@@ -51,6 +52,7 @@ class ProgressTracer(context: Context, attr: AttributeSet) : View(context,attr){
                 degLen = getFloat(R.styleable.ProgressTracer_arc_len, 320f)
                 completedColor = getColor(R.styleable.ProgressTracer_completed_color, completedColor)
                 remainingColor = getColor(R.styleable.ProgressTracer_remaining_color, remainingColor)
+                roundedEndings = getBoolean(R.styleable.ProgressTracer_rounded_endings, roundedEndings)
             }finally {
                 recycle()
             }
@@ -91,13 +93,14 @@ class ProgressTracer(context: Context, attr: AttributeSet) : View(context,attr){
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
         canvas?.apply {
-            val divPoint = degLen*progress/100f
+            val divPoint = degLen*(progress - EPSILON)/100f
             remainingPath.reset()
             roundOval.setAsOvalForRounding(startPoint.toDouble())
             remainingPath.apply {
                 arcTo(oval,startPoint, divPoint)
                 arcTo(smallOval, startPoint + divPoint, -divPoint)
-                arcTo(roundOval, startPoint, -180f)
+                if(roundedEndings)
+                    arcTo(roundOval, startPoint, -180f)
                 close()
             }
             drawPath(remainingPath,remainingPartPaint)
@@ -106,7 +109,8 @@ class ProgressTracer(context: Context, attr: AttributeSet) : View(context,attr){
             roundOval.setAsOvalForRounding((startPoint + degLen).toDouble())
             completedPath.apply {
                 arcTo(oval,startPoint + divPoint, degLen - divPoint)
-                arcTo(roundOval, startPoint + degLen, 180f)
+                if(roundedEndings)
+                    arcTo(roundOval, startPoint + degLen, 180f)
                 arcTo(smallOval, startPoint + degLen, -(degLen - divPoint))
                 close()
             }
@@ -125,5 +129,9 @@ class ProgressTracer(context: Context, attr: AttributeSet) : View(context,attr){
                 y - roundRadius,
                 x + roundRadius,
                 y+roundRadius)
+    }
+
+    companion object {
+        const val EPSILON = 0.00001f
     }
 }
